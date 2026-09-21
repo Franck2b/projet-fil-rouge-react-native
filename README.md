@@ -93,6 +93,9 @@ npm run qr
 `gabarit://machine/<slug>`. C'est le matériel de test, l'équivalent des cartes
 NFC fournies en cours.
 
+Le fichier [GUIDE.md](GUIDE.md) complète cette lecture : il dit quel fichier
+ouvrir pour chaque modification courante.
+
 ## Comptes de démonstration
 
 | Compte | Identifiants |
