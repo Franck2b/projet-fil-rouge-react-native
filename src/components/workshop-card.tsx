@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Card } from "@/components/ui/card";
+import { Photo } from "@/components/ui/photo";
 import { formatDistance } from "@/features/location/distance";
+import { workshopPhoto } from "@/theme/images";
 import { colors, spacing, text } from "@/theme/tokens";
 import type { Workshop } from "@/types/domain";
 
@@ -12,9 +14,13 @@ type Props = {
 
 export function WorkshopCard({ workshop, distance, onPress }: Props) {
   return (
-    <Card onPress={onPress} accessibilityLabel={`Voir l'atelier ${workshop.name}`}>
+    <Card
+      onPress={onPress}
+      accessibilityLabel={`Voir l’atelier ${workshop.name}`}
+      media={<Photo uri={workshopPhoto(workshop.slug)} alt={`Atelier de ${workshop.city}`} />}
+    >
       <View style={styles.header}>
-        <Text style={text.label}>{workshop.city}</Text>
+        <Text style={[text.label, styles.city]}>{workshop.city}</Text>
         {distance != null ? (
           <Text style={[text.label, styles.distance]}>à {formatDistance(distance)}</Text>
         ) : null}
@@ -29,5 +35,6 @@ export function WorkshopCard({ workshop, distance, onPress }: Props) {
 
 const styles = StyleSheet.create({
   header: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm },
+  city: { color: colors.rust },
   distance: { color: colors.rustDark },
 });

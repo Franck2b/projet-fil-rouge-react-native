@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,6 +26,7 @@ const CERTIFICATION_LABELS: Record<CertificationStatus, string> = {
 
 export default function ProfileScreen() {
   const { session, profile, signOut } = useSession();
+  const router = useRouter();
   const certifications = useResource(fetchCertifications);
 
   return (
@@ -75,6 +77,17 @@ export default function ProfileScreen() {
           </Card>
         ))}
       </View>
+
+      {profile?.role === "admin" ? (
+        <Card>
+          <Text style={text.label}>Responsable</Text>
+          <Text style={text.body}>
+            Vous arbitrez les demandes d’habilitation. La gestion du parc et des comptes reste sur
+            le site.
+          </Text>
+          <Button label="Espace responsable" onPress={() => router.push("/admin")} />
+        </Card>
+      ) : null}
 
       <Button label="Se déconnecter" variant="secondary" onPress={signOut} />
     </ScrollView>

@@ -41,9 +41,12 @@ export type Machine = {
   workshop: Pick<Workshop, "id" | "slug" | "name" | "city" | "latitude" | "longitude"> | null;
 };
 
+export type UserRole = "member" | "admin";
+
 export type Profile = {
   id: string;
   full_name: string;
+  role: UserRole;
   credits_balance: number;
   onboarding_completed: boolean;
   home_workshop_id: string | null;

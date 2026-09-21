@@ -44,7 +44,9 @@
         {
           "cameraPermission": "Gabarit utilise l'appareil photo pour scanner le QR code collé sur une machine et valider votre arrivée."
         }
-      ]
+      ],
+      "expo-image",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

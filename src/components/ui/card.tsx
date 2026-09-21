@@ -4,13 +4,22 @@ import { colors, spacing } from "@/theme/tokens";
 type Props = {
   children: React.ReactNode;
   onPress?: () => void;
+  /** Visuel affiché en pleine largeur au-dessus du contenu, sans marge. */
+  media?: React.ReactNode;
   accessibilityLabel?: string;
 };
 
 /** Bloc encadré, à plat : le relief du site vient des traits, pas des ombres. */
-export function Card({ children, onPress, accessibilityLabel }: Props) {
+export function Card({ children, onPress, media, accessibilityLabel }: Props) {
+  const content = (
+    <>
+      {media}
+      <View style={styles.body}>{children}</View>
+    </>
+  );
+
   if (!onPress) {
-    return <View style={styles.card}>{children}</View>;
+    return <View style={styles.card}>{content}</View>;
   }
 
   return (
@@ -20,7 +29,7 @@ export function Card({ children, onPress, accessibilityLabel }: Props) {
       accessibilityLabel={accessibilityLabel}
       style={({ pressed }) => [styles.card, pressed && styles.pressed]}
     >
-      {children}
+      {content}
     </Pressable>
   );
 }
@@ -30,8 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.paper,
     borderWidth: 1,
     borderColor: colors.line,
-    padding: spacing.lg,
-    gap: spacing.sm,
   },
+  body: { padding: spacing.lg, gap: spacing.sm },
   pressed: { backgroundColor: colors.bone },
 });

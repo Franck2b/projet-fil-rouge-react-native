@@ -1,7 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Photo } from "@/components/ui/photo";
 import { formatDistance } from "@/features/location/distance";
+import { categoryPhoto } from "@/theme/images";
 import { colors, spacing, text } from "@/theme/tokens";
 import { CATEGORY_LABELS, MACHINE_STATUS_LABELS, type Machine } from "@/types/domain";
 
@@ -12,10 +14,16 @@ type Props = {
 };
 
 export function MachineCard({ machine, distance, onPress }: Props) {
+  const category = CATEGORY_LABELS[machine.category];
+
   return (
-    <Card onPress={onPress} accessibilityLabel={`Voir la machine ${machine.name}`}>
+    <Card
+      onPress={onPress}
+      accessibilityLabel={`Voir la machine ${machine.name}`}
+      media={<Photo uri={categoryPhoto(machine.category)} alt={`Atelier ${category}`} />}
+    >
       <View style={styles.row}>
-        <Badge label={CATEGORY_LABELS[machine.category]} tone="rust" />
+        <Badge label={category} tone="rust" />
         {machine.status !== "available" ? (
           <Badge label={MACHINE_STATUS_LABELS[machine.status]} tone="amber" />
         ) : null}

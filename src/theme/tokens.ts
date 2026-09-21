@@ -1,7 +1,8 @@
 /**
- * Mêmes couleurs et mêmes règles typographiques que le site Next.js : papier
- * clair, encre charbon, un seul accent (rouille), aucun arrondi. Tout passe par
- * ces constantes pour qu'un changement de teinte se fasse à un seul endroit.
+ * Mêmes couleurs, mêmes polices et mêmes règles typographiques que le site
+ * Next.js : papier clair, encre charbon, un seul accent (rouille), aucun
+ * arrondi, des titres en capitales. Tout passe par ces constantes pour qu'un
+ * changement de teinte se fasse à un seul endroit.
  */
 
 export const colors = {
@@ -22,6 +23,16 @@ export const colors = {
   brickWash: "#F8E4E0",
 } as const;
 
+/** Les trois familles du site : titres, texte courant, étiquettes techniques. */
+export const fonts = {
+  display: "Archivo_800ExtraBold",
+  displayBold: "Archivo_700Bold",
+  body: "Inter_400Regular",
+  bodyMedium: "Inter_500Medium",
+  bodySemi: "Inter_600SemiBold",
+  mono: "IBMPlexMono_500Medium",
+} as const;
+
 export const spacing = {
   xs: 4,
   sm: 8,
@@ -35,16 +46,28 @@ export const spacing = {
 export const touchTarget = 44;
 
 export const text = {
-  title: { fontSize: 28, fontWeight: "700", letterSpacing: -0.5, color: colors.ink },
-  heading: { fontSize: 20, fontWeight: "700", color: colors.ink },
-  body: { fontSize: 15, lineHeight: 22, color: colors.inkSoft },
-  strong: { fontSize: 15, fontWeight: "600", color: colors.ink },
-  small: { fontSize: 13, color: colors.inkSoft },
+  title: {
+    fontFamily: fonts.display,
+    fontSize: 30,
+    lineHeight: 34,
+    letterSpacing: -0.6,
+    textTransform: "uppercase",
+    color: colors.ink,
+  },
+  heading: {
+    fontFamily: fonts.displayBold,
+    fontSize: 19,
+    letterSpacing: -0.2,
+    color: colors.ink,
+  },
+  body: { fontFamily: fonts.body, fontSize: 15, lineHeight: 22, color: colors.inkSoft },
+  strong: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.ink },
+  small: { fontFamily: fonts.body, fontSize: 13, lineHeight: 19, color: colors.inkSoft },
   /** Étiquette technique : petites capitales espacées, comme une cote sur un plan. */
   label: {
+    fontFamily: fonts.mono,
     fontSize: 11,
-    fontWeight: "600",
-    letterSpacing: 1.6,
+    letterSpacing: 1.8,
     textTransform: "uppercase",
     color: colors.kraft,
   },

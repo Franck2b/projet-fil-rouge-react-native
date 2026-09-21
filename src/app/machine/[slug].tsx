@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
+import { Photo } from "@/components/ui/photo";
 import { ScreenHeader, screen } from "@/components/ui/screen";
 import { ErrorState, Loading } from "@/components/ui/states";
 import { useSession } from "@/features/auth/session";
@@ -20,6 +21,7 @@ import { useResource } from "@/hooks/use-resource";
 import { bookMachine, fetchBusySlots } from "@/services/bookings";
 import { fetchMachineBySlug } from "@/services/catalog";
 import { toMessage } from "@/services/errors";
+import { categoryPhoto } from "@/theme/images";
 import { colors, spacing, text, touchTarget } from "@/theme/tokens";
 import { CATEGORY_LABELS, MACHINE_STATUS_LABELS } from "@/types/domain";
 import { formatDay, formatHour } from "@/utils/format";
@@ -106,6 +108,10 @@ export default function MachineScreen() {
         title={item.name}
         subtitle={item.summary}
       />
+
+      <View style={styles.photo}>
+        <Photo uri={categoryPhoto(item.category)} alt={`Atelier ${CATEGORY_LABELS[item.category]}`} tall />
+      </View>
 
       <View style={styles.row}>
         <Badge label={`${item.hourly_credits} crédit(s) / heure`} tone="rust" />
@@ -217,6 +223,7 @@ export default function MachineScreen() {
 
 const styles = StyleSheet.create({
   centered: { justifyContent: "center" },
+  photo: { borderWidth: 1, borderColor: colors.line },
   row: { flexDirection: "row", gap: spacing.sm },
   section: { gap: spacing.md },
   days: { gap: spacing.sm, paddingRight: spacing.lg },

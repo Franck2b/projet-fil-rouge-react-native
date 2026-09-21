@@ -4,7 +4,7 @@ import type { Certification, Profile } from "@/types/domain";
 export async function fetchProfile(userId: string): Promise<Profile> {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, full_name, credits_balance, onboarding_completed, home_workshop_id")
+    .select("id, full_name, role, credits_balance, onboarding_completed, home_workshop_id")
     .eq("id", userId)
     .single<Profile>();
 

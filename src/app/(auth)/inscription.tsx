@@ -2,6 +2,7 @@ import { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { ScreenHeader, screen } from "@/components/ui/screen";
@@ -49,8 +50,10 @@ export default function SignUpScreen() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView contentContainerStyle={screen.content} keyboardShouldPersistTaps="handled">
+          <Logo />
+
           <ScreenHeader
-            eyebrow="Gabarit"
+            eyebrow="Réseau d’ateliers partagés"
             title="Créer un compte"
             subtitle="10 crédits offerts à l'inscription, comme sur le site."
           />
