@@ -23,7 +23,7 @@ import { colors, spacing, text } from "@/theme/tokens";
 export default function HomeScreen() {
   const { profile } = useSession();
   const router = useRouter();
-  const { position, status, request } = usePosition();
+  const { position, status, request, openSettings } = usePosition();
 
   const workshops = useResource(fetchWorkshops, cachedWorkshops);
   const bookings = useResource(fetchMyBookings, cachedBookings);
@@ -101,9 +101,19 @@ export default function HomeScreen() {
           {status === "denied" ? (
             <Card>
               <Text style={text.body}>
-                Position refusée : les ateliers restent affichés, simplement sans distance. Vous
-                pouvez l’autoriser plus tard dans les réglages du téléphone.
+                Position refusée : les ateliers restent affichés, simplement sans distance.
               </Text>
+              <Button label="Redemander" variant="secondary" onPress={request} />
+            </Card>
+          ) : null}
+
+          {status === "blocked" ? (
+            <Card>
+              <Text style={text.body}>
+                La position est bloquée pour cette app. Le téléphone ne reposera plus la question :
+                elle se réactive depuis les réglages.
+              </Text>
+              <Button label="Ouvrir les réglages" variant="secondary" onPress={openSettings} />
             </Card>
           ) : null}
 

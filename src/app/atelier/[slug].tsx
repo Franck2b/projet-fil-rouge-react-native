@@ -18,7 +18,7 @@ import { colors, spacing, text } from "@/theme/tokens";
 export default function WorkshopScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
-  const { position, status, request } = usePosition();
+  const { position, status, request, openSettings } = usePosition();
 
   const workshop = useResource(useCallback(() => fetchWorkshopBySlug(slug), [slug]));
   const machines = useResource(fetchMachines, cachedMachines);
@@ -65,6 +65,8 @@ export default function WorkshopScreen() {
 
         {distance !== null ? (
           <Text style={text.strong}>À {formatDistance(distance)} de vous</Text>
+        ) : status === "blocked" ? (
+          <Button label="Ouvrir les réglages" variant="secondary" onPress={openSettings} />
         ) : status === "denied" ? (
           <Text style={text.small}>Position refusée : la distance n’est pas affichée.</Text>
         ) : (
