@@ -18,16 +18,17 @@ prise :
 | Vitrine, back-office, gestion longue | Action rapide, en atelier |
 | Catalogue complet, SEO | Machines filtrées, prochaine séance en tête |
 | Réservation depuis un bureau | Validation d'arrivée devant la machine |
-| Adresse d'un atelier | Ateliers triés par distance réelle |
+| Adresse d'un atelier | Ateliers sur une carte, triés par distance réelle, itinéraire en un appui |
 
 Deux capacités du téléphone portent cette valeur :
 
 1. **La caméra** — chaque machine porte un QR code. Le scanner déclare son
    arrivée : le serveur vérifie qu'une réservation du membre est bien en cours
    sur cette machine et enregistre la trace.
-2. **La géolocalisation** — elle classe les ateliers du plus proche au plus loin,
-   affiche la distance sur la fiche atelier, et confirme lors d'un scan que le
-   membre est bien à moins de 300 m de l'atelier.
+2. **La géolocalisation** — elle place le membre et les ateliers sur une carte,
+   classe les ateliers du plus proche au plus loin, affiche la distance sur la
+   fiche atelier, et confirme lors d'un scan que le membre est bien à moins de
+   300 m de l'atelier — zone dessinée sur la carte de la fiche atelier.
 
 > **Remarque sur le NFC.** Le sujet demandait le NFC. Il exige un *development
 > build*, donc une machine macOS (iOS) ou un abonnement EAS pour compiler dans le
@@ -119,19 +120,29 @@ créneau (« arrivée déjà enregistrée »).
 
 **Scénario géolocalisation**
 
-1. Onglet *Accueil* → **Trier par distance** → autoriser la position.
-2. Les trois ateliers se classent, distance affichée sur chaque carte.
-3. Refuser la permission : les ateliers restent listés, sans distance, avec un
-   message expliquant comment l'autoriser plus tard.
-4. Lors d'un scan hors de l'atelier : « Vous êtes trop loin de l'atelier ».
+1. Onglet *Accueil* : la carte affiche les trois ateliers.
+2. **Trier par distance** → autoriser la position : le point bleu du membre
+   apparaît, la carte se recadre pour l'inclure, les ateliers se classent avec
+   leur distance.
+3. Toucher une épingle puis sa bulle : ouverture de la fiche atelier.
+4. Sur la fiche atelier : carte avec le cercle de 300 m où le scan est accepté,
+   et bouton **Itinéraire** qui ouvre Plans (iOS) ou Google Maps (Android).
+5. Refuser la permission : la carte et les ateliers restent affichés, sans
+   position ni distance, avec un message expliquant comment l'autoriser plus tard.
+6. Lors d'un scan hors de l'atelier : « Vous êtes trop loin de l'atelier ».
 
 ## Expo Go et development build
 
 | | Expo Go | Development build |
 | --- | --- | --- |
 | Lancement | `npx expo start`, QR code | `npx expo run:android` / `run:ios`, puis `npx expo start --dev-client` |
-| Ce qui marche | **tout le projet** : navigation, session, caméra, GPS | idem, plus les modules natifs absents d'Expo Go |
+| Ce qui marche | **tout le projet** : navigation, session, caméra, GPS, carte | idem, plus les modules natifs absents d'Expo Go |
 | Nécessaire ici | oui, c'est le mode de test | non, aucun module natif hors SDK Expo |
+
+La carte utilise `react-native-maps`, inclus dans Expo Go : Plans d'Apple sur
+iOS, Google Maps sur Android, sans clé à fournir. Pour un development build ou
+une version publiée Android, il faudrait une clé Google Maps déclarée dans
+`app.json` via le plugin `react-native-maps`.
 
 Si le NFC devait être ajouté (`react-native-nfc-manager`), il faudrait un
 development build : ce module n'est pas inclus dans Expo Go.
@@ -180,7 +191,7 @@ annuler, valider une arrivée) vit dans des fonctions SQL `security definer`.
 
 - L'app est en français seulement, alors que le site est bilingue FR/EN.
 - Pas de NFC (voir plus haut), pas de notifications push.
-- La distance est à vol d'oiseau, sans carte affichée.
+- La distance est à vol d'oiseau ; l'itinéraire réel est délégué à l'app de cartes du téléphone.
 - L'administration (habilitations, gestion du parc) reste réservée au site.
 - Le projet Supabase gratuit se met en pause après une semaine sans usage : le
   réveiller depuis le tableau de bord Supabase avant une démonstration.

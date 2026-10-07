@@ -2,11 +2,13 @@ import { useCallback } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { MachineCard } from "@/components/machine-card";
+import { WorkshopMap } from "@/components/workshop-map";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Photo } from "@/components/ui/photo";
 import { ScreenHeader, screen } from "@/components/ui/screen";
 import { ErrorState, Loading } from "@/components/ui/states";
+import { openDirections } from "@/features/location/directions";
 import { distanceMeters, formatDistance } from "@/features/location/distance";
 import { usePosition } from "@/features/location/use-position";
 import { useResource } from "@/hooks/use-resource";
@@ -14,7 +16,10 @@ import { cachedMachines, fetchMachines, fetchWorkshopBySlug } from "@/services/c
 import { workshopPhoto } from "@/theme/images";
 import { colors, spacing, text } from "@/theme/tokens";
 
-/** Fiche atelier : adresse, horaires, distance depuis le membre, parc sur place. */
+/** Rayon de validation d'une arrivée, identique à celui de check_in_with_code(). */
+const CHECK_IN_RADIUS = 300;
+
+/** Fiche atelier : adresse, horaires, carte, distance depuis le membre, parc sur place. */
 export default function WorkshopScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
@@ -42,10 +47,11 @@ export default function WorkshopScreen() {
   const place = workshop.data;
   const onSite = (machines.data ?? []).filter((machine) => machine.workshop_id === place.id);
 
-  const distance =
-    position && place.latitude !== null && place.longitude !== null
-      ? distanceMeters(position, { latitude: place.latitude, longitude: place.longitude })
+  const coordinates =
+    place.latitude !== null && place.longitude !== null
+      ? { latitude: place.latitude, longitude: place.longitude }
       : null;
+  const distance = position && coordinates ? distanceMeters(position, coordinates) : null;
 
   return (
     <ScrollView style={screen.page} contentContainerStyle={screen.content}>
@@ -73,6 +79,22 @@ export default function WorkshopScreen() {
           <Button label="Calculer la distance" variant="secondary" onPress={request} />
         )}
       </Card>
+
+      {coordinates ? (
+        <View style={styles.section}>
+          <Text style={text.label}>Sur la carte</Text>
+          <WorkshopMap workshops={[place]} position={position} checkInRadius={CHECK_IN_RADIUS} />
+          <Text style={text.small}>
+            Le cercle marque la zone de {CHECK_IN_RADIUS} m dans laquelle le scan d’arrivée est
+            accepté.
+          </Text>
+          <Button
+            label="Itinéraire"
+            variant="secondary"
+            onPress={() => openDirections(coordinates, place.name)}
+          />
+        </View>
+      ) : null}
 
       <View style={styles.section}>
         <Text style={text.label}>Machines sur place</Text>

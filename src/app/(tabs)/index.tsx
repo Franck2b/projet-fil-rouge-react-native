@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { BookingCard } from "@/components/booking-card";
 import { Hero } from "@/components/hero";
 import { WorkshopCard } from "@/components/workshop-card";
+import { WorkshopMap } from "@/components/workshop-map";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { screen } from "@/components/ui/screen";
@@ -130,6 +131,12 @@ export default function HomeScreen() {
           {workshops.error && !workshops.data ? (
             <ErrorState message={workshops.error} onRetry={workshops.refresh} />
           ) : null}
+
+          <WorkshopMap
+            workshops={workshops.data ?? []}
+            position={position}
+            onSelect={(workshop) => router.push(`/atelier/${workshop.slug}`)}
+          />
 
           {places.map((workshop) => (
             <WorkshopCard
